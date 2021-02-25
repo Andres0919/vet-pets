@@ -1,5 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  getColletion,
+  addDocument,
+  updateDocument,
+  deleteDocument,
+} from "./actions";
 
+const collection = "pets";
 const petModel = (pet = {}) => ({
   birthdate: pet.birthdate || "",
   breed: pet.breed || "",
@@ -22,9 +29,25 @@ function App() {
     setPet((pet) => ({ ...pet, [name]: value }));
   };
 
-  const addPet = (e) => {
+  useEffect(() => {
+    (async () => {
+      const result = await getColletion(collection);
+      if (result.statusResponse) {
+        setPets(result.data);
+      }
+    })();
+  }, []);
+
+  const addPet = async (e) => {
     e.preventDefault();
-    const id = pets.length + 1;
+
+    const result = await addDocument(collection, pet);
+    if (!result.statusResponse) {
+      // setError(result.error);
+      return;
+    }
+
+    const id = result.data.id;
     setPets([...pets, { ...pet, id }]);
     setPet(petModel());
   };
@@ -35,8 +58,14 @@ function App() {
     setIsEditMode(true);
   };
 
-  const updatePet = (e) => {
+  const updatePet = async (e) => {
     e.preventDefault();
+
+    const result = await updateDocument(collection, id, pet);
+    if (!result.statusResponse) {
+      // setError(result.error);
+      return;
+    }
 
     const petsUpdated = pets.map((item) =>
       item.id === id ? { ...pet, id } : item
@@ -46,7 +75,13 @@ function App() {
     setIsEditMode(false);
   };
 
-  const deletePet = (petId) => {
+  const deletePet = async (petId) => {
+    const result = await deleteDocument(collection, petId);
+    if (!result.statusResponse) {
+      // setError(result.error);
+      return;
+    }
+
     const petsUpdated = pets.filter((item) => item.id !== petId);
     setPets(petsUpdated);
   };
