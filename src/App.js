@@ -1,62 +1,91 @@
 import React, { useState } from "react";
 
-const dataInitial = () => ({
-  ownerAddress: "",
-  ownerEmail: "",
-  ownerName: "",
-  ownerTel: "",
-  petBirthdate: new Date().toString(10),
-  petBreed: "",
-  petName: "",
-  petType: "",
+const petModel = (pet = {}) => ({
+  birthdate: pet.birthdate || "",
+  breed: pet.breed || "",
+  name: pet.name || "",
+  type: pet.type || "",
+  ownerAddress: pet.ownerAddress || "",
+  ownerEmail: pet.ownerEmail || "",
+  ownerName: pet.ownerName || "",
+  ownerTel: pet.ownerTel || "",
 });
 
 function App() {
-  const [pet, setPet] = useState(dataInitial());
+  const [id, setId] = useState(null);
+  const [pet, setPet] = useState(petModel());
   const [pets, setPets] = useState([]);
-
-  const addPet = () => setPet(dataInitial());
+  const [isEditMode, setIsEditMode] = useState(false);
 
   const setProperty = ({ target }) => {
     const { name, value } = target;
     setPet((pet) => ({ ...pet, [name]: value }));
   };
 
+  const addPet = (e) => {
+    e.preventDefault();
+    const id = pets.length + 1;
+    setPets([...pets, { ...pet, id }]);
+    setPet(petModel());
+  };
+
+  const editPet = (pet) => {
+    setId(pet.id);
+    setPet(petModel(pet));
+    setIsEditMode(true);
+  };
+
+  const updatePet = (e) => {
+    e.preventDefault();
+
+    const petsUpdated = pets.map((item) =>
+      item.id === id ? { ...pet, id } : item
+    );
+    setPets(petsUpdated);
+    setPet(petModel());
+    setIsEditMode(false);
+  };
+
+  const deletePet = (petId) => {
+    const petsUpdated = pets.filter((item) => item.id !== petId);
+    setPets(petsUpdated);
+  };
+
   return (
     <div>
-      <h1>Hello world Vet</h1>
-      <form onSubmit={addPet}>
+      <h1>Hello world Vet {isEditMode ? "Edición" : "Creación"}</h1>
+      <form onSubmit={isEditMode ? updatePet : addPet}>
         <input
-          name="petName"
+          name="name"
           type="text"
           className="form-control"
           placeholder="Enter pet name"
           onChange={setProperty}
-          value={pet.petName}
+          value={pet.name}
         />
         <input
-          name="petType"
+          name="type"
           type="text"
           className="form-control"
           placeholder="Enter pet name"
           onChange={setProperty}
-          value={pet.petType}
+          value={pet.type}
         />
         <input
-          name="petBreed"
+          name="breed"
           type="text"
           className="form-control"
           placeholder="Enter pet name"
           onChange={setProperty}
-          value={pet.petBreed}
+          value={pet.breed}
         />
         <input
-          name="petBirthdate"
+          name="birthdate"
           type="date"
           className="form-control"
           placeholder="Enter pet name"
           onChange={setProperty}
-          value={pet.petBirthdate}
+          value={pet.birthdate}
         />
         <input
           name="ownerName"
@@ -90,8 +119,17 @@ function App() {
           onChange={setProperty}
           value={pet.ownerAddress}
         />
-        <button>Enviar</button>
+        <button>{isEditMode ? "Actualizar" : "Crear"}</button>
       </form>
+      <table>
+        {pets.map((pet) => (
+          <li>
+            {JSON.stringify(pet)}{" "}
+            <button onClick={() => editPet(pet)}>Editar</button>
+            <button onClick={() => deletePet(pet.id)}>Eliminar</button>
+          </li>
+        ))}
+      </table>
     </div>
   );
 }
