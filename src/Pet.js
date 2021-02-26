@@ -3,7 +3,7 @@ import { Collapse } from "react-bootstrap";
 import { BsPencil, BsFillTrashFill } from "react-icons/bs";
 
 const Pet = (props) => {
-  const { pet, editPet, deletePet } = props;
+  const { pet, editPet, openConfirmModal } = props;
   const [open, setOpen] = useState(false);
 
   return (
@@ -13,7 +13,7 @@ const Pet = (props) => {
           <div className="col-12 d-flex align-items-center">
             <span className="h1 text-capitalize mr-4">{pet.name}</span>
             <button
-              className="btn btn-sm btn-warning ml-4 mx-2"
+              className="btn btn-sm btn-warning text-white ml-4 mx-2"
               onClick={() => editPet(pet)}
             >
               <BsPencil />
@@ -21,7 +21,7 @@ const Pet = (props) => {
             </button>
             <button
               className="btn btn-sm btn-danger"
-              onClick={() => deletePet(pet.id)}
+              onClick={() => openConfirmModal(pet.id)}
             >
               <BsFillTrashFill />
               Eliminar

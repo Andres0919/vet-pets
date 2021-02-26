@@ -13,7 +13,7 @@ const PetForm = (props) => {
   } = props;
   return (
     <>
-      <Modal show={showModal} size="lg" animation="false">
+      <Modal show={showModal} size="lg">
         <Form onSubmit={isEditMode ? updatePet : addPet}>
           <Modal.Header closeButton>
             <Modal.Title>

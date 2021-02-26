@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "react-bootstrap";
+import { Alert, Button, Modal } from "react-bootstrap";
 import Pet from "./Pet";
 import PetForm from "./PetForm";
 import {
@@ -27,6 +27,7 @@ function App() {
   const [pets, setPets] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
 
   const handleShow = () => setShowModal(true);
 
@@ -89,6 +90,16 @@ function App() {
     handleClose();
   };
 
+  const closeConfirmDeletePet = () => {
+    setId(null);
+    setShowConfirmModal(false);
+  };
+
+  const openConfirmModal = (petId) => {
+    setId(petId);
+    setShowConfirmModal(true);
+  };
+
   const deletePet = async (petId) => {
     const result = await deleteDocument(collection, petId);
     if (!result.statusResponse) {
@@ -98,17 +109,35 @@ function App() {
 
     const petsUpdated = pets.filter((item) => item.id !== petId);
     setPets(petsUpdated);
+
+    closeConfirmDeletePet();
   };
 
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between my-3">
-        <h1>Vet-Pets - Mascotas registradas</h1>
+        <h1>Vet Pets - Mascotas registradas</h1>
         <Button variant="primary" onClick={handleShow}>
           Registrar mascota
         </Button>
       </div>
       <hr />
+      <Modal show={showConfirmModal}>
+        <Alert className="bg-warning text-white">¿Está seguro(a)?</Alert>
+
+        <Modal.Body>
+          <p>¿Está seguro(a) de eliminar este registro? </p>
+        </Modal.Body>
+
+        <Modal.Footer>
+          <Button onClick={closeConfirmDeletePet} variant="light">
+            No
+          </Button>
+          <Button onClick={() => deletePet(id)} variant="danger">
+            Si, Eliminar
+          </Button>
+        </Modal.Footer>
+      </Modal>
       <PetForm
         addPet={addPet}
         handleClose={handleClose}
@@ -124,9 +153,9 @@ function App() {
           {pets.map((pet) => (
             <Pet
               key={pet.id}
+              openConfirmModal={openConfirmModal}
               pet={pet}
               editPet={editPet}
-              deletePet={deletePet}
             />
           ))}
         </div>
