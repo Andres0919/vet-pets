@@ -25,9 +25,11 @@ function App() {
   const [id, setId] = useState(null);
   const [pet, setPet] = useState(petModel());
   const [pets, setPets] = useState([]);
+  const [petsMirror, setPetsMirror] = useState([]);
   const [isEditMode, setIsEditMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [search, setSearch] = useState("");
 
   const handleShow = () => setShowModal(true);
 
@@ -50,6 +52,14 @@ function App() {
       }
     })();
   }, []);
+
+  useEffect(() => {
+    (async () => {
+      setPetsMirror(() =>
+        pets.filter((pet) => pet.name.toLowerCase().includes(search))
+      );
+    })();
+  }, [pets]);
 
   const addPet = async (e) => {
     e.preventDefault();
@@ -113,6 +123,15 @@ function App() {
     closeConfirmDeletePet();
   };
 
+  const filterPets = (e) => {
+    const str = e.target.value.toLowerCase();
+    setSearch(str);
+    const petsFiltered = pets.filter((pet) =>
+      pet.name.toLowerCase().includes(str)
+    );
+    setPetsMirror(petsFiltered);
+  };
+
   return (
     <div className="container mt-5">
       <div className="d-flex justify-content-between my-3">
@@ -120,6 +139,15 @@ function App() {
         <Button variant="primary" onClick={handleShow}>
           Registrar mascota
         </Button>
+      </div>
+      <div>
+        <input
+          type="text"
+          className="form-control"
+          placeholder="Buscar mascota"
+          onChange={filterPets}
+          value={search}
+        />
       </div>
       <hr />
       <Modal show={showConfirmModal}>
@@ -150,7 +178,7 @@ function App() {
 
       <div className="container">
         <div className="row">
-          {pets.map((pet) => (
+          {petsMirror.map((pet) => (
             <Pet
               key={pet.id}
               openConfirmModal={openConfirmModal}

@@ -28,14 +28,14 @@ const Pet = (props) => {
             </button>
           </div>
           <div className="col-12 lead font-italic">
-            <span className="lead mr-2">{pet.type}</span>-
-            <span className="lead ml-2">{pet.breed}</span>
+            <span className="mr-2">{pet.type}</span>-
+            <span className="ml-2">{pet.breed}</span>
           </div>
         </div>
         <p className="font-weight-bold">
           Propietario:
           <span className="mx-2">{pet.ownerName}</span>-
-          <span className="mx-2">{pet.ownerTel}</span>
+          <span className="mx-2">Tel. {pet.ownerTel}</span>
           <button
             onClick={() => setOpen(!open)}
             aria-controls="example-collapse-text"
