@@ -50,7 +50,7 @@ const Pet = (props) => {
             <div className="mx-4">
               <h4>Mascota</h4>
               <ul className="list-unstyled">
-                <li>Fecha de cumpleaños: {pet.birthdate}</li>
+                <li>Fecha de nacimiento: {pet.birthdate}</li>
               </ul>
               <h4>Propietario</h4>
               <ul className="list-unstyled">
