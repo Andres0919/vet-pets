@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import { Button } from "react-bootstrap";
+import Pet from "./Pet";
+import PetForm from "./PetForm";
 import {
   getColletion,
   addDocument,
@@ -26,6 +28,14 @@ function App() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
+  const handleShow = () => setShowModal(true);
+
+  const handleClose = () => {
+    setShowModal(false);
+    setPet(petModel());
+    setIsEditMode(false);
+  };
+
   const setProperty = ({ target }) => {
     const { name, value } = target;
     setPet((pet) => ({ ...pet, [name]: value }));
@@ -51,8 +61,8 @@ function App() {
 
     const id = result.data.id;
     setPets([...pets, { ...pet, id }]);
-    setShowModal(false);
-    setPet(petModel());
+
+    handleClose();
   };
 
   const editPet = (pet) => {
@@ -75,9 +85,8 @@ function App() {
       item.id === id ? { ...pet, id } : item
     );
     setPets(petsUpdated);
-    setPet(petModel());
-    setShowModal(false);
-    setIsEditMode(false);
+
+    handleClose();
   };
 
   const deletePet = async (petId) => {
@@ -91,111 +100,37 @@ function App() {
     setPets(petsUpdated);
   };
 
-  const handleClose = () => {
-    setShowModal(false);
-    setPet(petModel());
-  };
-  const handleShow = () => setShowModal(true);
-
   return (
-    <div>
-      <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
-      </Button>
+    <div className="container mt-5">
+      <div className="d-flex justify-content-between my-3">
+        <h1>Vet-Pets - Mascotas registradas</h1>
+        <Button variant="primary" onClick={handleShow}>
+          Registrar mascota
+        </Button>
+      </div>
+      <hr />
+      <PetForm
+        addPet={addPet}
+        handleClose={handleClose}
+        isEditMode={isEditMode}
+        pet={pet}
+        setProperty={setProperty}
+        showModal={showModal}
+        updatePet={updatePet}
+      />
 
-      <Modal show={showModal} size="lg">
-        <Form onSubmit={isEditMode ? updatePet : addPet}>
-          <Modal.Header closeButton>
-            <Modal.Title>
-              Hello world Vet {isEditMode ? "Edición" : "Creación"}
-            </Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <input
-              name="name"
-              type="text"
-              className="form-control"
-              placeholder="Enter pet name"
-              onChange={setProperty}
-              value={pet.name}
+      <div className="container">
+        <div className="row">
+          {pets.map((pet) => (
+            <Pet
+              key={pet.id}
+              pet={pet}
+              editPet={editPet}
+              deletePet={deletePet}
             />
-            <input
-              name="type"
-              type="text"
-              className="form-control"
-              placeholder="Enter pet name"
-              onChange={setProperty}
-              value={pet.type}
-            />
-            <input
-              name="breed"
-              type="text"
-              className="form-control"
-              placeholder="Enter pet name"
-              onChange={setProperty}
-              value={pet.breed}
-            />
-            <input
-              name="birthdate"
-              type="date"
-              className="form-control"
-              placeholder="Enter pet name"
-              onChange={setProperty}
-              value={pet.birthdate}
-            />
-            <input
-              name="ownerName"
-              type="text"
-              className="form-control"
-              placeholder="Enter pet name"
-              onChange={setProperty}
-              value={pet.ownerName}
-            />
-            <input
-              name="ownerTel"
-              type="text"
-              className="form-control"
-              placeholder="Enter pet name"
-              onChange={setProperty}
-              value={pet.ownerTel}
-            />
-            <input
-              name="ownerEmail"
-              type="text"
-              className="form-control"
-              placeholder="Enter pet name"
-              onChange={setProperty}
-              value={pet.ownerEmail}
-            />
-            <input
-              name="ownerAddress"
-              type="text"
-              className="form-control"
-              placeholder="Enter pet name"
-              onChange={setProperty}
-              value={pet.ownerAddress}
-            />
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
-              Close
-            </Button>
-            <Button type="submit" variant="primary">
-              {isEditMode ? "Actualizar" : "Crear"}
-            </Button>
-          </Modal.Footer>
-        </Form>
-      </Modal>
-
-      <ul>
-        {pets.map((pet) => (
-          <li key={pet.id}>
-            {JSON.stringify(pet)}{" "}
-            <button onClick={() => editPet(pet)}>Editar</button>
-            <button onClick={() => deletePet(pet.id)}>Eliminar</button>
-          </li>
-        ))}
-      </ul>
+          ))}
+        </div>
+      </div>
     </div>
   );
 }
