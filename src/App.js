@@ -144,7 +144,7 @@ function App() {
         <input
           type="text"
           className="form-control"
-          placeholder="Buscar mascota"
+          placeholder="Buscar mascota..."
           onChange={filterPets}
           value={search}
         />

@@ -25,6 +25,7 @@ const PetForm = (props) => {
             <Form.Group className="col-6">
               <Form.Label>Nombre</Form.Label>
               <Form.Control
+                required
                 name="name"
                 type="text"
                 className="form-control"
@@ -36,6 +37,7 @@ const PetForm = (props) => {
             <Form.Group className="col-6">
               <Form.Label>Tipo de mascota</Form.Label>
               <Form.Control
+                required
                 name="type"
                 type="text"
                 className="form-control"
@@ -47,6 +49,7 @@ const PetForm = (props) => {
             <Form.Group className="col-6">
               <Form.Label>Raza</Form.Label>
               <Form.Control
+                required
                 name="breed"
                 type="text"
                 className="form-control"
@@ -58,6 +61,7 @@ const PetForm = (props) => {
             <Form.Group className="col-6">
               <Form.Label>Fecha de nacimiento</Form.Label>
               <input
+                required
                 name="birthdate"
                 type="date"
                 className="form-control"
@@ -72,6 +76,7 @@ const PetForm = (props) => {
             <Form.Group className="col-6">
               <Form.Label>Nombre completo</Form.Label>
               <input
+                required
                 name="ownerName"
                 type="text"
                 className="form-control"
@@ -83,6 +88,7 @@ const PetForm = (props) => {
             <Form.Group className="col-6">
               <Form.Label>Teléfono</Form.Label>
               <input
+                required
                 name="ownerTel"
                 type="text"
                 className="form-control"
@@ -94,6 +100,7 @@ const PetForm = (props) => {
             <Form.Group className="col-6">
               <Form.Label>Correo electrónico</Form.Label>
               <input
+                required
                 name="ownerEmail"
                 type="text"
                 className="form-control"
@@ -105,6 +112,7 @@ const PetForm = (props) => {
             <Form.Group className="col-6">
               <Form.Label>Dirección</Form.Label>
               <input
+                required
                 name="ownerAddress"
                 type="text"
                 className="form-control"
