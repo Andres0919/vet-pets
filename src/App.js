@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { size } from "lodash";
 import { Alert, Button, Modal } from "react-bootstrap";
 import Pet from "./Pet";
 import PetForm from "./PetForm";
@@ -178,14 +179,22 @@ function App() {
 
       <div className="container">
         <div className="row">
-          {petsMirror.map((pet) => (
-            <Pet
-              key={pet.id}
-              openConfirmModal={openConfirmModal}
-              pet={pet}
-              editPet={editPet}
-            />
-          ))}
+          {size(petsMirror) === 0 ? (
+            <div className="col-12">
+              <h5 className="text-center text-info">
+                No se encontraron mascotas
+              </h5>
+            </div>
+          ) : (
+            petsMirror.map((pet) => (
+              <Pet
+                key={pet.id}
+                openConfirmModal={openConfirmModal}
+                pet={pet}
+                editPet={editPet}
+              />
+            ))
+          )}
         </div>
       </div>
     </div>
